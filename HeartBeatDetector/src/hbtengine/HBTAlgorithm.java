@@ -222,6 +222,9 @@ public class HBTAlgorithm {
 
 	static void getInstanceAndLocalVariablePair(){
 
+		System.out.println("\n ****************************************   INSTANCE AND LOCAL VARIABLE PAIR    *****************************************************");
+
+		
 		List<Assignment> assignmenrtStatements =  ParseASTVisitor.getAssignmenrtStatements();
 		Map<String,String> instanceVariableDeclarationWithClassMap =ParseASTVisitor.getInstanceVariableDeclarationWithClassMap();
 		Map<String,String> assignmentMap = new HashMap<String,String>(); 
@@ -270,7 +273,9 @@ public class HBTAlgorithm {
 			}
 		}
 	}
-
+	
+	
+	//TODO - To be implemented is similar way as Sender is found
 	private static void checkInstanceVariableinCallFlowToFindReceiver(String lsh_inst_Var) {
  		
 	}
@@ -285,11 +290,14 @@ public class HBTAlgorithm {
 		return null;
 	}
 
+	private static boolean HBSenderFound =false;
+	
 	private static void checkIfMethodCalledFromThread(String methodName){
 		String calssName = methodName.substring(0, methodName.indexOf("."));
 		System.out.println("checkIfMethodCalledFromThread  methodName = " + methodName );
 		System.out.println("checkIfMethodCalledFromThread  calssName = " + calssName );
 		if(classIsThread.get(calssName).booleanValue() == true){
+			HBSenderFound  = true;
 			System.out.println("\n ***************************************************************************************************");
 			System.out.println("\n       *******         HEARTBEAT SENDER CLASS IS FOUND AND IT IS :   " + calssName + "        *******");
 			System.out.println("\n ****************************************************************************************************");
@@ -417,11 +425,11 @@ public class HBTAlgorithm {
 
 		//  Give the pkg name to be tested - test case one at a time. Uncomment below package assignment and run the code
 		
-	 	String heartbeat_testcase_pkg =  "heartbeat" ;				    	//A1
+	 	//String heartbeat_testcase_pkg =  "heartbeat" ;				    	//A1
 		//String heartbeat_testcase_pkg =  "heartbeat_testcase_pacemaker" ;		//A2 
 		//String heartbeat_testcase_pkg =  "heartbeat_testcase4" ;				//A3 
 		//String heartbeat_testcase_pkg =  "heartbeat_testcase_pacemaker_1";	//A4 
-		//String heartbeat_testcase_pkg =  "heartbeat_testcase3" ;				//A5 
+		String heartbeat_testcase_pkg =  "heartbeat_testcase3" ;				//A5 
 		//String heartbeat_testcase_pkg =  "heartbeat_testcase_pacemaker_2";	//A6
 
 		
@@ -435,6 +443,8 @@ public class HBTAlgorithm {
 		A5	heartbeat_testcase3					N			2		3		N
 		A6	heartbeat_testcase_pacemaker_2		N			3		2		Y
 		*/
+	 	
+	 	HBSenderFound = false;
 		
 		
 		getListOfFiles(heartbeat_testcase_pkg);
@@ -478,11 +488,13 @@ public class HBTAlgorithm {
 		System.out.println("\n ****************************************  CALL FLOW  *****************************************************");
 		makecallflow();
 		printCallflow();
-		System.out.println("\n ****************************************   INSTANCE AND LOCAL VARIABLE PAIR    *****************************************************");
 
  		getInstanceAndLocalVariablePair(); 
  
-		//createMethodTree(methodTreeRoot);
+ 		if(!HBSenderFound){
+ 			System.out.println("\n ****************************************  NO HEART BEAT COMPONENT FOUND   *****************************************************");
 
+ 		}
+ 
 	}
 }
