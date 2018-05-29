@@ -290,11 +290,13 @@ public class HBTAlgorithm {
 		System.out.println("checkIfMethodCalledFromThread  methodName = " + methodName );
 		System.out.println("checkIfMethodCalledFromThread  calssName = " + calssName );
 		if(classIsThread.get(calssName).booleanValue() == true){
-			System.out.println("\n ******************************************************************");
-			System.out.println("\n ******************** SENDER CLASS IS : " + calssName + "***********");
-			System.out.println("\n ******************************************************************");
+			System.out.println("\n ***************************************************************************************************");
+			System.out.println("\n       *******         HEARTBEAT SENDER CLASS IS FOUND AND IT IS :   " + calssName + "        *******");
+			System.out.println("\n ****************************************************************************************************");
+			System.out.println("\n **  <<  Similar way as described in the Algorithm and Code , the RECEIVER class can also be found >>  **");			
 
 		}
+		
 	}
 	private static void checkLocalVariableInCallFlowToFindSender(String called_method, String rhs_local_Var) {
 		
@@ -413,8 +415,28 @@ public class HBTAlgorithm {
 
 	public static void main(String []args){
 
-		//  Give the pkg name to be tested - test case one at a time.
-		String heartbeat_testcase_pkg =  "heartbeat" ;//"heartbeat_testcase_pacemaker"; 
+		//  Give the pkg name to be tested - test case one at a time. Uncomment below package assignment and run the code
+		
+	 	String heartbeat_testcase_pkg =  "heartbeat" ;				    	//A1
+		//String heartbeat_testcase_pkg =  "heartbeat_testcase_pacemaker" ;		//A2 
+		//String heartbeat_testcase_pkg =  "heartbeat_testcase4" ;				//A3 
+		//String heartbeat_testcase_pkg =  "heartbeat_testcase_pacemaker_1";	//A4 
+		//String heartbeat_testcase_pkg =  "heartbeat_testcase3" ;				//A5 
+		//String heartbeat_testcase_pkg =  "heartbeat_testcase_pacemaker_2";	//A6
+
+		
+		/*
+		No.	Sample code						2.Actual	 	3.Manual 	   4.Algorithm
+															3a(Y)	3b(N)	
+		A1	heartbeat							Y			5		0		Y
+		A2	heartbeat_testcase_pacemaker		Y			1		4		N
+		A3	heartbeat_testcase4					Y			2		3		Y
+		A4	heartbeat_testcase_pacemaker_1		Y			0		5		Y
+		A5	heartbeat_testcase3					N			2		3		N
+		A6	heartbeat_testcase_pacemaker_2		N			3		2		Y
+		*/
+		
+		
 		getListOfFiles(heartbeat_testcase_pkg);
 
 		HBTelements hbtEelements = HBTelements.getInstance();
