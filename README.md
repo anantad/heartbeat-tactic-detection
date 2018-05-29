@@ -1,6 +1,6 @@
 # heartbeat-tactic-detection
 
-Example code to experiment heartbeat detection algorithm. This  code is just to experiment and explain the how heatbeat algorithm can be realized. 
+Example code that implements heartbeat detection algorithm. This code is just to experiment and explain how heatbeat detection algorithm can be realized. 
 
 A. Prerequisite : 
 
@@ -9,7 +9,7 @@ A. Prerequisite :
 2. To parse Java program and collect all nodes such as class, declared methods, invoked methods and declared variables Java AST parser (supported by Eclipse JDT plugin) is used. After the above components are identified, we have analyzed the static structure among parsed AST nodes.
 
 
-B. Main Class : HBTAlgorithm.java
+B. Heartbet detection algorthim implementation class : HBTAlgorithm.java
 
 C. TestCases :
 						
