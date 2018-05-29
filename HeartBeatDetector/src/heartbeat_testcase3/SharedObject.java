@@ -1,4 +1,4 @@
-package heartbeat_testcase3;
+/*package heartbeat_testcase3;
 
 public class SharedObject {
 
@@ -17,3 +17,4 @@ public class SharedObject {
 	//it could be a bug. detect this  as well.
 	
 }
+*/

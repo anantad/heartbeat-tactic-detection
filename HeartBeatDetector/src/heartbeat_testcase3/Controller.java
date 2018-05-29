@@ -10,12 +10,9 @@ import messageCommunication.FileWatcher;
 public class Controller {	
 
 	public static int MESSAGE_COOMUNICATION_TYPE = 4;
-	private SharedObject sharedObject = new SharedObject();
-	private static SenderThread senderThread = new SenderThread();
+ 	private static SenderThread senderThread = new SenderThread();
 
-	public SharedObject getSharedObject(){
-		return sharedObject;
-	}
+ 
 	public static void delay(){
 		try {
 			Thread.sleep(1000);

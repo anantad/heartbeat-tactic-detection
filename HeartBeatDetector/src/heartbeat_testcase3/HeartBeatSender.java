@@ -53,8 +53,7 @@ public class HeartBeatSender {
 			sendHeartBeatUsingSocket(data);
 			break;
 		case 3:
-			sendHeartBeatUsingSharedObject(data);
-			break;
+ 			break;
 		case 4:
 			sendHeartBeatUsingFileOperation(data);
 			break;
@@ -97,11 +96,7 @@ public class HeartBeatSender {
 	}
 	
 	
-	public static void sendHeartBeatUsingSharedObject(int data){
-		System.out.println(">> Send data using shared variable: " + data); 
- 		SharedObject.setSharedVariable(new String(String.valueOf(data)));
-	}
-	
+ 
 	public static void sendHeartBeatUsingFileOperation(int data){
 		try {
 			System.out.println(">> Send data using file operation: " + data);

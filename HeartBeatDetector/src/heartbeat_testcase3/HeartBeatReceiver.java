@@ -13,7 +13,7 @@ public class HeartBeatReceiver {
 	private static int received_data;
 
 	public static void updateData(int data) {
-		received_data = data;
+		received_data = 0;
 	}
 
 	public static void receiveHeartBeat(){
@@ -27,8 +27,7 @@ public class HeartBeatReceiver {
 			receiveHeartBeatUsingSocket( );
 			break;
 		case 3:
-			receiveHeartBeatUsingSharedObject();
-			break;
+ 			break;
 		case 4:
 			receiveHeartBeatUsingFileOperation();
 			break;
@@ -79,12 +78,7 @@ public class HeartBeatReceiver {
 		}
 	}
 
-	private static void receiveHeartBeatUsingSharedObject(){
-		String data = SharedObject.getSharedVariable();
-		System.out.println("=> Received data throught SharedVariable " + data); 
-		
-	}
-
+ 
 	private static void receiveHeartBeatUsingFileOperation(){
 		try {
 			String data = FileOperations.readTextFile("heartbeatdata.txt");
