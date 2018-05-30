@@ -1,7 +1,6 @@
 package heartbeat_testcase_pacemaker;
 
-public class SenderThread extends Thread{
-
+public class SenderThread implements  Runnable {
 	
 	@Override
 	public void run() {
