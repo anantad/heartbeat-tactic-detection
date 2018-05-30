@@ -78,14 +78,14 @@ public class HBTAlgorithm {
 		List<MethodInvocation> methodInvocationList  = ParseASTVisitor.getMethodInvocationList();
 
 		//System.out.println("\n !!!!  getAllinvokedMethodsFromInsideTheMethod methodDeclaration = " + methodDeclaration.getName().toString() );
-	 	//System.out.println("!!!!  getAllinvokedMethodsFromInsideTheMethod  methodDeclaration.getBody() = " + methodDeclaration.getBody().toString() );
+		//System.out.println("!!!!  getAllinvokedMethodsFromInsideTheMethod  methodDeclaration.getBody() = " + methodDeclaration.getBody().toString() );
 
 		for(MethodInvocation  methodInvocation :methodInvocationList){
-			 if(methodDeclaration.getBody().toString().contains(methodInvocation.getName().toString())){
-				 
+			if(methodDeclaration.getBody().toString().contains(methodInvocation.getName().toString())){
+
 				// System.out.println("!!!!  getAllinvokedMethodsFromInsideTheMethod  BODY CONTAIN = " + methodInvocation.getName().toString() );
-				 	
- 				//HBTmethod hbtMethod = new HBTmethod();
+
+				//HBTmethod hbtMethod = new HBTmethod();
 				//hbtMethod.setMethodName(methodInvocation.getName().toString());
 				HBTInvokedMethod  hbtInvokedMethod = new HBTInvokedMethod();
 
@@ -133,7 +133,7 @@ public class HBTAlgorithm {
 					String isInfinite = isInfiniteLoop(method.getBody().toString());
 					if(isInfinite.equals("T")){
 						hbtDeclaredMethod.getLoop().put(entry.getKey().toString(),isInfinite);	
-						 
+
 						System.out.println(" className.method.=" +className +"." +method.getName().toString() +" , whileStatement = "+entry.getKey().toString() );
 						methodInLoopMap.put(className +"." +method.getName().toString() , entry.getKey()); // method.getName() is parent method which contains infinite while loop
 					}
@@ -224,7 +224,7 @@ public class HBTAlgorithm {
 
 		System.out.println("\n ****************************************   INSTANCE AND LOCAL VARIABLE PAIR    *****************************************************");
 
-		
+
 		List<Assignment> assignmenrtStatements =  ParseASTVisitor.getAssignmenrtStatements();
 		Map<String,String> instanceVariableDeclarationWithClassMap =ParseASTVisitor.getInstanceVariableDeclarationWithClassMap();
 		Map<String,String> assignmentMap = new HashMap<String,String>(); 
@@ -242,6 +242,7 @@ public class HBTAlgorithm {
 			lhs_InstanceVar.add(assignment.getLeftHandSide().toString());
 			rhs_localVar.add(assignment.getRightHandSide().toString()); 
 		}
+		System.out.println("\n -------------------   Listing assignments  START --------------------- \n");
 		for(String lsh_inst_Var: lhs_InstanceVar){
 			String instance_Var_Class = instanceVariableDeclarationWithClassMap.get(lsh_inst_Var);
 			if( instance_Var_Class != null){
@@ -251,15 +252,16 @@ public class HBTAlgorithm {
 				//System.out.println("\n  THE RHS  is '" + rhs_local_Var + "'\n" );
 
 				//get Method name where this assignment is available
+			
 				for(MethodDeclaration method:methodDeclarationList){ 
- 					if(isMethodBodyContainsAssignments(lsh_inst_Var,rhs_local_Var, method)){
- 
- 						String method_name = method.getName().toString();
+					if(isMethodBodyContainsAssignments(lsh_inst_Var,rhs_local_Var, method)){
+
+						String method_name = method.getName().toString();
 						//add assigmentStament , className.Methodname in a map
 						assigmentWithMethodMap.put( lsh_inst_Var+"="+rhs_local_Var ,method_name );
-						System.out.println("\n  ASSIGNMENT IS :  " +  lsh_inst_Var + "=" +rhs_local_Var+ " IN  METHOD : "
+						System.out.println("  ASSIGNMENT IS :  " +  lsh_inst_Var + "=" +rhs_local_Var+ " IN  METHOD : "
 								+ method.getName().toString() + " IN CLASS " + methodDeclarationWithClassMap.get(method_name));
- 						System.out.println("\n ................................................................................. ");
+						//System.out.println("\n ................................................................................. ");
 
 						//backtrack call flow with rhs_local_Var to find sender of this.
 						if(method.parameters().toString().contains(rhs_local_Var)){
@@ -269,15 +271,16 @@ public class HBTAlgorithm {
 						//Find for a Receiver who uses lsh_inst_Var and resets
 						checkInstanceVariableinCallFlowToFindReceiver(lsh_inst_Var);
 					}
-				}
+				}				 
 			}
 		}
+		
 	}
-	
-	
+
+
 	//TODO - To be implemented is similar way as Sender is found
 	private static void checkInstanceVariableinCallFlowToFindReceiver(String lsh_inst_Var) {
- 		
+
 	}
 	private static String getMethodAruments( String caller  ){
 
@@ -291,37 +294,34 @@ public class HBTAlgorithm {
 	}
 
 	private static boolean HBSenderFound =false;
-	
+	private static ArrayList<String> HBSenderList = new ArrayList<String>(); 
+
+
 	private static void checkIfMethodCalledFromThread(String methodName){
 		String calssName = methodName.substring(0, methodName.indexOf("."));
 		System.out.println("checkIfMethodCalledFromThread  methodName = " + methodName );
 		System.out.println("checkIfMethodCalledFromThread  calssName = " + calssName );
 		if(classIsThread.get(calssName).booleanValue() == true){
-			HBSenderFound  = true;
-			System.out.println("\n ***************************************************************************************************");
-			System.out.println("\n       *******         HEARTBEAT SENDER CLASS IS FOUND AND IT IS :   " + calssName + "        *******");
-			System.out.println("\n ****************************************************************************************************");
-			System.out.println("\n **  <<  Similar way as described in the Algorithm and Code , the RECEIVER class can also be found >>  **");			
-
+			System.out.println("\n\n @@@@   A Heart Beat Sender class is detected    @@@@ \n\n" );
+			HBSenderList.add(calssName);
 		}
-		
+
 	}
 	private static void checkLocalVariableInCallFlowToFindSender(String called_method, String rhs_local_Var) {
-		
-		System.out.println("\n *****************************  checkLocalVariableInCallFlowToFindSender  *************************************");
 
+ 
 		String caller = callerOfMethodMap.get(called_method);
 		WhileStatement whileStatement =  methodInLoopMap.get(callerOfMethodMap.get(called_method));
 
-/*		System.out.println("checkLocalVariableInCallFlowToFindSender  rhs_local_Var =  " + rhs_local_Var );		
+		/*		System.out.println("checkLocalVariableInCallFlowToFindSender  rhs_local_Var =  " + rhs_local_Var );		
 		System.out.println("checkLocalVariableInCallFlowToFindSender  Called_method =  " + called_method );
 		System.out.println("checkLocalVariableInCallFlowToFindSender  Caller = "+ caller);
 		System.out.println("checkLocalVariableInCallFlowToFindSender  whileStatement = "+ whileStatement);
-*/
+		 */
 		if( caller!=null && getMethodAruments(caller).contains(rhs_local_Var) ){
-			 String temp_called_method = called_method.substring(called_method.indexOf(".")+1, called_method.length());
-				System.out.println("checkLocalVariableInCallFlowToFindSender  temp_called_method = "+ temp_called_method);
- 
+			String temp_called_method = called_method.substring(called_method.indexOf(".")+1, called_method.length());
+			System.out.println("\n --> checkLocalVariableInCallFlowToFindSender   called_method = "+ temp_called_method);
+
 			if( whileStatement != null && whileStatement.getBody().toString().contains(temp_called_method)){
 				checkIfMethodCalledFromThread( callerOfMethodMap.get(called_method));		
 				checkIfMethodCalledFromThread(callerOfMethodMap.get(callerOfMethodMap.get(called_method)));		 	
@@ -364,7 +364,6 @@ public class HBTAlgorithm {
 			 */
 			hbtDMethod.setMethodName(hbtDeclaredMethod_name);
 			hbtDMethod.setClassName(className);
-			hbtDMethod.setLoop(hbtDeclaredMethod.getLoop());
 
 			for(HBTInvokedMethod hbtInvokedMethod :temp_hbtInvokedMethods){
 				if( hbtDeclaredMethod_name.equals(hbtInvokedMethod.getMethodName() /*  check for more conditions like return type etc.*/)){
@@ -404,7 +403,7 @@ public class HBTAlgorithm {
 
 			for(HBTmethod i : m.getInvokingMethods() ){
 				called = i.getClassName() + "." +  i.getMethodName();
-				
+
 				callerOfMethodMap.put(caller,called );
 				System.out.println("@@@  called = " +caller  +" caller = " + called  );
 				caller = called;
@@ -424,15 +423,15 @@ public class HBTAlgorithm {
 	public static void main(String []args){
 
 		//  Give the pkg name to be tested - test case one at a time. Uncomment below package assignment and run the code
-		
-	 	//String heartbeat_testcase_pkg =  "heartbeat" ;				    	//A1
+
+		//String heartbeat_testcase_pkg =  "heartbeat" ;				    	//A1
 		//String heartbeat_testcase_pkg =  "heartbeat_testcase_pacemaker" ;		//A2 
 		//String heartbeat_testcase_pkg =  "heartbeat_testcase4" ;				//A3 
 		//String heartbeat_testcase_pkg =  "heartbeat_testcase_pacemaker_1";	//A4 
 		String heartbeat_testcase_pkg =  "heartbeat_testcase3" ;				//A5 
 		//String heartbeat_testcase_pkg =  "heartbeat_testcase_pacemaker_2";	//A6
 
-		
+
 		/*
 		No.	Sample code						2.Actual	 	3.Manual 	   4.Algorithm
 															3a(Y)	3b(N)	
@@ -442,11 +441,11 @@ public class HBTAlgorithm {
 		A4	heartbeat_testcase_pacemaker_1		Y			0		5		Y
 		A5	heartbeat_testcase3					N			2		3		N
 		A6	heartbeat_testcase_pacemaker_2		N			3		2		Y
-		*/
-	 	
-	 	HBSenderFound = false;
-		
-		
+		 */
+
+		HBSenderFound = false;
+
+
 		getListOfFiles(heartbeat_testcase_pkg);
 
 		HBTelements hbtEelements = HBTelements.getInstance();
@@ -489,12 +488,24 @@ public class HBTAlgorithm {
 		makecallflow();
 		printCallflow();
 
- 		getInstanceAndLocalVariablePair(); 
- 
- 		if(!HBSenderFound){
- 			System.out.println("\n ****************************************  NO HEART BEAT COMPONENT FOUND   *****************************************************");
+		getInstanceAndLocalVariablePair(); 
 
- 		}
- 
+
+		if(!HBSenderList.isEmpty() && HBSenderList.size()>0){
+			for(String hbtsender:HBSenderList){
+			System.out.println("\n\n ************************************************ RESULT ***************************************************");
+			System.out.println("\n       *******         HEARTBEAT SENDER CLASS IS FOUND AND IT IS :   " + hbtsender + "        *******");
+			System.out.println("\n ****************************************************************************************************");
+			
+			}
+			System.out.println("\n **  <<  Similar way as described in the Algorithm and Code , the RECEIVER class can also be found >>  **");
+		}else{
+			System.out.println("\n\n *************************************** RESULT ***************************************************");
+			System.out.println("\n ******************************  NO HEART BEAT COMPONENT FOUND   ****************************");
+			System.out.println("\n ****************************************************************************************************");
+			
+
+		}
+
 	}
 }
